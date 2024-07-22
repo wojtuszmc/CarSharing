@@ -1,22 +1,16 @@
 package pl.dare.carsharing.dto;
 
+import lombok.*;
+
+@Data
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class CarDto {
+
     private String regNumber;
     private String model;
+    private int id;
 
-    public String getRegNumber() {
-        return regNumber;
-    }
-
-    public void setRegNumber(String regNumber) {
-        this.regNumber = regNumber;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
 }
