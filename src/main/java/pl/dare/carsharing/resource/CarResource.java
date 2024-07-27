@@ -33,38 +33,26 @@ public class CarResource {
 
     @GetMapping("/details")
     public CarDto getCarByModel(String model) {
-        for (CarDto carDto: getCars()) {
-            if (model.equalsIgnoreCase(carDto.getModel())) {
-                return carDto;
-            }
-        }
-        return null;
+        return service.getCarByModel(model);
     }
 
     @GetMapping("/dashboard/admin/list")
     public CarDto getCarByRegNumber(String regNumber) {
-        for (CarDto carDto: getCars()) {
-            if (regNumber.equalsIgnoreCase(carDto.getRegNumber())) {
-                return carDto;
-            }
-        }
-        return null;
+        return service.getCarByRegNumber(regNumber);
     }
 
     @PutMapping
     public void updateCarModel(String regNumber, String newModel) {
-        CarDto carDto = getCarByRegNumber(regNumber);
-            carDto.setModel(newModel);
+        service.getCarModel(regNumber, newModel);
     }
 
     @DeleteMapping
     public void removeCarByRegNumber(String regNumber) {
-        CarDto carDto = getCarByRegNumber(regNumber);
-        getCars().remove(carDto);
+        service.removeCarByRegNumber(regNumber);
     }
 
     @PostMapping
     public void addCars(List<CarDto> carsToAdd) {
-        getCars().addAll(carsToAdd);
+        service.addCars(carsToAdd);
     }
 }
