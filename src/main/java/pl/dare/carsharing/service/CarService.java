@@ -33,15 +33,6 @@ public class CarService {
         return carsDto;
     }
 
-    public CarDto getCarByRegNumber(String regNumber) {
-        for (CarDto carDto: getCars()) {
-            if (regNumber.equalsIgnoreCase(carDto.getRegNumber())) {
-                return carDto;
-            }
-        }
-        return null;
-    }
-
     public void addCars(List<CarDto> carsToAdd) {
         getCars().addAll(carsToAdd);
     }
