@@ -5,7 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.web.bind.annotation.*;
-import pl.dare.carsharing.dto.CarDto;
+import pl.dare.carsharing.model.AddCarRequest;
+import pl.dare.carsharing.model.CarDto;
+import pl.dare.carsharing.model.CarsResponse;
+import pl.dare.carsharing.model.EditCarRequest;
 import pl.dare.carsharing.service.CarService;
 
 import java.util.List;
@@ -22,36 +25,33 @@ public class CarResource {
     private CarService service = new CarService();
 
     @GetMapping
-    public List<CarDto> getCars() {
-        return service.getCars();
-    }
-
-    @PostMapping("/detail")
-    public void addCar(@RequestBody CarDto car) {
-        service.addCar(car);
-    }
-
-    @GetMapping("/details")
-    public CarDto getCarByModel(String model) {
-        return service.getCarByModel(model);
-    }
-
-    @GetMapping("/dashboard/admin/list")
-    public CarDto getCarByRegNumber(String regNumber) {
-        return service.getCarByRegNumber(regNumber);
-    }
-
-    @PutMapping
-    public void updateCarModel(String regNumber, String newModel) {
-        service.getCarModel(regNumber, newModel);
-    }
-
-    @DeleteMapping
-    public void removeCarByRegNumber(String regNumber) {
-        service.removeCarByRegNumber(regNumber);
+    public CarsResponse getCars() {
+        CarsResponse carsResponse = new CarsResponse();
+        carsResponse.setCars(service.getCars());
+        return carsResponse;
     }
 
     @PostMapping
+    public void addCar(@RequestBody AddCarRequest request) {
+        service.addCar(request);
+    }
+
+    @GetMapping("/{id}")
+    public CarDto getCarBy(@PathVariable("id") int id) {
+        return service.getCarById(id);
+    }
+
+    @PutMapping("/{id}")
+    public void updateCar(@PathVariable("id") int id, @RequestBody EditCarRequest request) {
+        service.updateCar(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public void removeCar(@PathVariable("id") int id) {
+        service.removeCar(id);
+    }
+
+    @PostMapping("/all")
     public void addCars(List<CarDto> carsToAdd) {
         service.addCars(carsToAdd);
     }
