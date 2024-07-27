@@ -9,7 +9,6 @@ import pl.dare.carsharing.dto.CarDto;
 import pl.dare.carsharing.service.CarService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Data
 @AllArgsConstructor
@@ -27,12 +26,12 @@ public class CarResource {
         return service.getCars();
     }
 
-    @PostMapping
+    @PostMapping("/detail")
     public void addCar(@RequestBody CarDto car) {
         service.addCar(car);
     }
 
-    @GetMapping
+    @GetMapping("/details")
     public CarDto getCarByModel(String model) {
         for (CarDto carDto: getCars()) {
             if (model.equalsIgnoreCase(carDto.getModel())) {
@@ -42,7 +41,7 @@ public class CarResource {
         return null;
     }
 
-    @GetMapping
+    @GetMapping("/dashboard/admin/list")
     public CarDto getCarByRegNumber(String regNumber) {
         for (CarDto carDto: getCars()) {
             if (regNumber.equalsIgnoreCase(carDto.getRegNumber())) {
