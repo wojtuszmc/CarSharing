@@ -1,22 +1,16 @@
 package pl.dare.carsharing.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import pl.dare.carsharing.jpa.Car;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarRepository {
-    private List<Car> carDatabse = new ArrayList<>();
+@Repository
+public interface CarRepository extends JpaRepository<Car, Long> {
 
-    public List<Car> getAllCars() {
-        return carDatabse;
-    }
+    //List<Car> findAll(); //SELECT * FROM CAR; To istnieje automatycznie
+    void deleteById(Long carId);
 
-    public void addCar(Car car) {
-        carDatabse.add(car);
-    }
-
-    public void removeCar(int id) {
-        carDatabse.remove(id - 1);
-    }
 }

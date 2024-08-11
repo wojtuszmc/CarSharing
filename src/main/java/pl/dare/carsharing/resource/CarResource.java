@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.dare.carsharing.model.AddCarRequest;
 import pl.dare.carsharing.model.CarDto;
@@ -21,8 +22,8 @@ import java.util.List;
 @RestController
 @RequestMapping("cars")
 public class CarResource {
-
-    private CarService service = new CarService();
+    @Autowired
+    private CarService service;
 
     @GetMapping
     public CarsResponse getCars() {
@@ -37,17 +38,17 @@ public class CarResource {
     }
 
     @GetMapping("/{id}")
-    public CarDto getCarBy(@PathVariable("id") int id) {
+    public CarDto getCarBy(@PathVariable("id") Long id) {
         return service.getCarById(id);
     }
 
     @PutMapping("/{id}")
-    public void updateCar(@PathVariable("id") int id, @RequestBody EditCarRequest request) {
+    public void updateCar(@PathVariable("id") Long id, @RequestBody EditCarRequest request) {
         service.updateCar(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void removeCar(@PathVariable("id") int id) {
+    public void removeCar(@PathVariable("id") Long id) {
         service.removeCar(id);
     }
 

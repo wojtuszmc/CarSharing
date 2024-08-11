@@ -12,6 +12,6 @@ public class CarDto {
 
     private String regNumber;
     private String model;
-    private int id;
+    private long id;
 
 }
