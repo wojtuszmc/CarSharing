@@ -13,5 +13,5 @@ import lombok.ToString;
 public class CustomerDto {
     private String name;
     private String lastName;
-    private int id;
+    private long id;
 }

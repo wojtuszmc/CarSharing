@@ -21,12 +21,4 @@ public class Car {
     private String model;
     @Column
     private String regNumber;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }
