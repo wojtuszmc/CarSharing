@@ -46,17 +46,22 @@ public class CarService {
             }
         }
         return null;
-    } // zad. Select From Car where id = id. w CarRepository
+    } // zad. Select * From Car where id = id. w CarRepository.
+    //odp. w CarRepository jest wbudowana moteda findById
 
     public void removeCar(Long id) {
         carRepository.deleteById(id);
     }
 
     public void updateCar(Long id, EditCarRequest request) {
-        removeCar(id);
-        Car car = new Car();
-        car.setRegNumber(request.getRegNumber());
+//        removeCar(id);
+//        Car car = new Car();
+//        car.setRegNumber(request.getRegNumber());
+//        car.setModel(request.getModel());
+//        carRepository.save(car); // Jebnij update w bazie, bez usuwania
+        Car car = carRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Car not found"));
         car.setModel(request.getModel());
-        carRepository.save(car); // Jebnij update w bazie, bez usuwania
+        car.setRegNumber(request.getRegNumber());
+        carRepository.save(car);
     }
 }

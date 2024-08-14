@@ -38,7 +38,7 @@ public class CarResource {
     }
 
     @GetMapping("/{id}")
-    public CarDto getCarBy(@PathVariable("id") Long id) {
+    public CarDto getCar(@PathVariable("id") Long id) {
         return service.getCarById(id);
     }
 

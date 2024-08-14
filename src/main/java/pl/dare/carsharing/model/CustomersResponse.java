@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,6 +12,6 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 
-public class CustomerResponse {
+public class CustomersResponse {
     private List<CustomerDto> customers;
 }
