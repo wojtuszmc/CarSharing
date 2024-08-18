@@ -40,12 +40,17 @@ public class CarService {
     }
 
     public CarDto getCarById(Long id) {
-        for (CarDto carDto: getCars()) {
-            if (carDto.getId() == id) {
-                return carDto;
-            }
-        }
-        return null;
+        Car car = carRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Car not found"));
+        CarDto carDto = new CarDto();
+        carDto.setRegNumber(car.getRegNumber());
+        carDto.setModel(car.getModel());
+        return carDto;
+//        for (CarDto carDto: getCars()) {
+//            if (carDto.getId() == id) {
+//                return carDto;
+//            }
+//        }
+//        return null;
     } // zad. Select * From Car where id = id. w CarRepository.
     //odp. w CarRepository jest wbudowana moteda findById
 

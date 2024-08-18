@@ -5,13 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+import java.util.List;
 
-public class CustomerDto {
-    private String name;
-    private String lastName;
-    private Long id;
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Data
+
+public class ReservationsResponse {
+
+    private List<ReservationDto> reservations;
 }

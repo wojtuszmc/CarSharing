@@ -43,12 +43,11 @@ public class CustomerService {
     }
 
     public CustomerDto getCustomerById(Long id) { // Zapytaj
-        for (CustomerDto customerDto: getCustomers()) {
-            if (customerDto.getId() == id) {
-                return customerDto;
-            }
-        }
-        return null;
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+        CustomerDto customerDto = new CustomerDto();
+        customerDto.setName(customer.getName());
+        customerDto.setLastName(customer.getLastName());
+        return customerDto;
     }
 
     public void removeCustomer(Long id) {

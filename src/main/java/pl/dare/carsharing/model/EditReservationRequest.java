@@ -10,8 +10,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 
-public class CustomerDto {
-    private String name;
-    private String lastName;
-    private Long id;
+public class EditReservationRequest {
+
+    private CarDto carDto;
+
+    private CustomerDto customerDto;
 }

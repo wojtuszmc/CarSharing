@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import pl.dare.carsharing.model.CustomerDto;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -16,9 +19,14 @@ import lombok.ToString;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
+
     @Column
     private String name;
+
     @Column
     private String lastName;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Reservation> reservations;
 }

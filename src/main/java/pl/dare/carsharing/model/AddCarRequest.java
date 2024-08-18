@@ -14,6 +14,6 @@ public class AddCarRequest {
 
     private String regNumber;
     private String model;
-    private int id;
+    private Long id;
 
 }
