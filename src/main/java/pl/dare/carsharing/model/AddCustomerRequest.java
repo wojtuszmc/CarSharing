@@ -14,5 +14,5 @@ public class AddCustomerRequest {
 
         private String name;
         private String lastName;
-        private Long id;
+
 }

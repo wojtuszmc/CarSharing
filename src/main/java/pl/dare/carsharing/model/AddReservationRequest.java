@@ -12,7 +12,7 @@ import lombok.ToString;
 
 public class AddReservationRequest {
 
-    private Long id;
-    private CarDto carDto;
-    private CustomerDto customerDto;
+    private Long carId;
+    private Long customerId;
+
 }

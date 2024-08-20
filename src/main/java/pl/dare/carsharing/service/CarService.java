@@ -42,6 +42,7 @@ public class CarService {
     public CarDto getCarById(Long id) {
         Car car = carRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Car not found"));
         CarDto carDto = new CarDto();
+        carDto.setId(car.getId());
         carDto.setRegNumber(car.getRegNumber());
         carDto.setModel(car.getModel());
         return carDto;

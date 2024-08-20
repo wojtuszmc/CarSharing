@@ -19,7 +19,6 @@ public class CustomerService {
 
     public void addCustomer(AddCustomerRequest request) {
         Customer customer = new Customer();
-        customer.setId(request.getId());
         customer.setName(request.getName());
         customer.setLastName(request.getLastName());
         customerRepository.save(customer);
@@ -45,6 +44,7 @@ public class CustomerService {
     public CustomerDto getCustomerById(Long id) { // Zapytaj
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
         CustomerDto customerDto = new CustomerDto();
+        customerDto.setId(customer.getId());
         customerDto.setName(customer.getName());
         customerDto.setLastName(customer.getLastName());
         return customerDto;

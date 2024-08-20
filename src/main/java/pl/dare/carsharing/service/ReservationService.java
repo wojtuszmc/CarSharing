@@ -25,10 +25,10 @@ public class ReservationService {
     private CustomerRepository customerRepository;
 
     public void addReservation(AddReservationRequest request) {
-        Car car = carRepository.findById(request.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid car ID"));
+        Car car = carRepository.findById(request.getCarId()).orElseThrow(() -> new IllegalArgumentException("Invalid car ID"));
 
-        Customer customer = customerRepository.findById(request.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid" +
-                "customer ID"));
+        Customer customer = customerRepository.findById(request.getCustomerId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid customer ID"));
 
         Reservation reservation = new Reservation();
         reservation.setCar(car);
@@ -41,11 +41,7 @@ public class ReservationService {
         List<Reservation> reservations = reservationRepository.findAll();
 
         for (Reservation reservation : reservations) {
-            ReservationDto reservationDto = new ReservationDto();
-            CarDto carDto = mapToCarDto(reservation.getCar());
-            reservationDto.setCarDto(carDto);
-            CustomerDto customerDto = mapToCustomerDto(reservation.getCustomer());
-            reservationDto.setCustomerDto(customerDto);
+            ReservationDto reservationDto = mapToReservationDto(reservation);
             reservationsDto.add(reservationDto);
         }
         return reservationsDto;
@@ -53,6 +49,7 @@ public class ReservationService {
 
     private CarDto mapToCarDto(Car car) {
         CarDto carDto = new CarDto();
+        carDto.setId(car.getId());
         carDto.setRegNumber(car.getRegNumber());
         carDto.setModel(car.getModel());
         return carDto;
@@ -60,6 +57,7 @@ public class ReservationService {
 
     private CustomerDto mapToCustomerDto(Customer customer) {
         CustomerDto customerDto = new CustomerDto();
+        customerDto.setId(customer.getId());
         customerDto.setName(customer.getName());
         customerDto.setLastName(customer.getLastName());
         return customerDto;
@@ -67,6 +65,7 @@ public class ReservationService {
 
     private ReservationDto mapToReservationDto(Reservation reservation) {
         ReservationDto reservationDto = new ReservationDto();
+        reservationDto.setId(reservation.getId());
         reservationDto.setCarDto(mapToCarDto(reservation.getCar()));
         reservationDto.setCustomerDto(mapToCustomerDto(reservation.getCustomer()));
         return reservationDto;
@@ -90,9 +89,9 @@ public class ReservationService {
     public void updateReservation(Long id, EditReservationRequest request) {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Reservation" +
                 " not found"));
-        Customer customer = customerRepository.findById(request.getCustomerDto().getId())
+        Customer customer = customerRepository.findById(request.getCustomerId())
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
-        Car car = carRepository.findById(request.getCarDto().getId())
+        Car car = carRepository.findById(request.getCarId())
                 .orElseThrow(() -> new IllegalArgumentException("Car not found"));
 
         reservation.setCustomer(customer);
