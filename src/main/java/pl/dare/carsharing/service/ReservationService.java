@@ -11,6 +11,7 @@ import pl.dare.carsharing.repository.CustomerRepository;
 import pl.dare.carsharing.repository.ReservationRepository;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +64,28 @@ public class ReservationService {
     public List<ReservationDto> getReservationsByCarId(Long carId) {
         List<ReservationDto> reservationsDto = new ArrayList<>();
         List<Reservation> reservations = reservationRepository.findReservationsByCarId(carId);
+
+        for (Reservation reservation : reservations) {
+            ReservationDto reservationDto = mapToReservationDto(reservation);
+            reservationsDto.add(reservationDto);
+        }
+        return reservationsDto;
+    }
+
+    public List<ReservationDto> getReservationsByCarAndDateRange(Long carId, ZonedDateTime startDateFrom, ZonedDateTime startDateTo) {
+        List<ReservationDto> reservationsDto = new ArrayList<>();
+        List<Reservation> reservations = reservationRepository.findByCarIdAndStartDateBetween(carId, startDateFrom, startDateTo);
+
+        for (Reservation reservation : reservations) {
+            ReservationDto reservationDto = mapToReservationDto(reservation);
+            reservationsDto.add(reservationDto);
+        }
+        return reservationsDto;
+    }
+
+    public List<ReservationDto> getReservationsByDateRange(ZonedDateTime startDateFrom, ZonedDateTime startDateTo) {
+        List<ReservationDto> reservationsDto = new ArrayList<>();
+        List<Reservation> reservations = reservationRepository.findByStartDateBetween(startDateFrom, startDateTo);
 
         for (Reservation reservation : reservations) {
             ReservationDto reservationDto = mapToReservationDto(reservation);

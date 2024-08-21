@@ -14,6 +14,9 @@ import pl.dare.carsharing.service.CarService;
 import pl.dare.carsharing.service.CustomerService;
 import pl.dare.carsharing.service.ReservationService;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Data
@@ -34,10 +37,26 @@ public class ReservationResource {
     CustomerService customerService;
 
     @GetMapping
-    public ReservationsResponse getReservations(@RequestParam(required = false) Long carId) {
+    public ReservationsResponse getReservations(
+            @RequestParam(required = false) Long carId,
+            @RequestParam(required = false) Instant startDateFrom,
+            @RequestParam(required = false) Instant startDateTo,
+            @RequestParam(defaultValue = "Europe/Warsaw") String timeZone) {
+
+        ZoneId zoneId = ZoneId.of(timeZone);
+
+        ZonedDateTime startDateTimeFrom = (startDateFrom != null) ? ZonedDateTime.ofInstant(startDateFrom, zoneId) : null;
+        ZonedDateTime startDateTimeTo = (startDateTo != null) ? ZonedDateTime.ofInstant(startDateTo, zoneId) : null;
+
+
         ReservationsResponse reservationsResponse = new ReservationsResponse();
-        if (carId != null) {
+        if (carId != null && startDateTimeFrom != null && startDateTimeTo != null) {
+            reservationsResponse.setReservations(reservationService
+                    .getReservationsByCarAndDateRange(carId, startDateTimeFrom, startDateTimeTo));
+        } else if (carId != null) {
             reservationsResponse.setReservations(reservationService.getReservationsByCarId(carId));
+        } else if (startDateFrom != null && startDateTimeTo != null) {
+            reservationsResponse.setReservations(reservationService.getReservationsByDateRange(startDateTimeFrom, startDateTimeTo));
         } else {
             reservationsResponse.setReservations(reservationService.getReservations());
         }
