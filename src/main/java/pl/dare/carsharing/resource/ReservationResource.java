@@ -34,9 +34,13 @@ public class ReservationResource {
     CustomerService customerService;
 
     @GetMapping
-    public ReservationsResponse getReservations() {
+    public ReservationsResponse getReservations(@RequestParam(required = false) Long carId) {
         ReservationsResponse reservationsResponse = new ReservationsResponse();
-        reservationsResponse.setReservations(reservationService.getReservations());
+        if (carId != null) {
+            reservationsResponse.setReservations(reservationService.getReservationsByCarId(carId));
+        } else {
+            reservationsResponse.setReservations(reservationService.getReservations());
+        }
         return reservationsResponse;
     }
 

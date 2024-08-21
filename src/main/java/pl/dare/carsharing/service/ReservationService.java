@@ -60,6 +60,17 @@ public class ReservationService {
         return reservationsDto;
     }
 
+    public List<ReservationDto> getReservationsByCarId(Long carId) {
+        List<ReservationDto> reservationsDto = new ArrayList<>();
+        List<Reservation> reservations = reservationRepository.findReservationsByCarId(carId);
+
+        for (Reservation reservation : reservations) {
+            ReservationDto reservationDto = mapToReservationDto(reservation);
+            reservationsDto.add(reservationDto);
+        }
+        return reservationsDto;
+    }
+
     private CarDto mapToCarDto(Car car) {
         CarDto carDto = new CarDto();
         carDto.setId(car.getId());
