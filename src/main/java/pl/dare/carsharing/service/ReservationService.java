@@ -10,6 +10,7 @@ import pl.dare.carsharing.repository.CarRepository;
 import pl.dare.carsharing.repository.CustomerRepository;
 import pl.dare.carsharing.repository.ReservationRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +31,21 @@ public class ReservationService {
         Customer customer = customerRepository.findById(request.getCustomerId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid customer ID"));
 
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime threeMinutesAgo = LocalDateTime.now().minusMinutes(3);
+
+        boolean carReserved = reservationRepository.existsByCarAndCreatedAtAfter(car, threeMinutesAgo);
+        boolean customerReserved = reservationRepository.existsByCustomerAndCreatedAtAfter(customer, threeMinutesAgo);
+
+        if (carReserved || customerReserved) {
+            throw new IllegalArgumentException("The car or customer has an active reservation within the last 3 minutes.");
+        }
+
         Reservation reservation = new Reservation();
         reservation.setCar(car);
         reservation.setCustomer(customer);
+        reservation.setCreatedAt(now);
+        reservation.setEndAt(now.plusMinutes(3));
         reservationRepository.save(reservation);
     }
 
@@ -68,6 +81,8 @@ public class ReservationService {
         reservationDto.setId(reservation.getId());
         reservationDto.setCarDto(mapToCarDto(reservation.getCar()));
         reservationDto.setCustomerDto(mapToCustomerDto(reservation.getCustomer()));
+        reservationDto.setCreatedAt(reservation.getCreatedAt());
+        reservationDto.setEndAt(reservation.getEndAt());
         return reservationDto;
     }
 
@@ -84,6 +99,10 @@ public class ReservationService {
 
     public void removeReservation(Long id) {
         reservationRepository.deleteById(id);
+    }
+
+    public void removeReservations() {
+        reservationRepository.deleteAll();
     }
 
     public void updateReservation(Long id, EditReservationRequest request) {

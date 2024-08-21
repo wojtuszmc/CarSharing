@@ -21,7 +21,11 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-//    private LocalDateTime reservationDate;
+    @Column
+    private LocalDateTime createdAt;
+
+    @Column
+    private LocalDateTime endAt;
 
     @ManyToOne
     @JoinColumn(name = "car_id")

@@ -7,6 +7,8 @@ import lombok.ToString;
 import pl.dare.carsharing.jpa.Car;
 import pl.dare.carsharing.jpa.Customer;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,4 +19,6 @@ public class ReservationDto {
     private Long id;
     private CarDto carDto;
     private CustomerDto customerDto;
+    private LocalDateTime createdAt;
+    private LocalDateTime endAt;
 }

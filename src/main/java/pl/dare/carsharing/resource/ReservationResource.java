@@ -45,6 +45,11 @@ public class ReservationResource {
         reservationService.addReservation(request);
     }
 
+    @DeleteMapping
+    public void removeAll() {
+        reservationService.removeReservations();
+    }
+
     @GetMapping("/{id}")
     public ReservationDto getReservationById(@PathVariable("id") Long id) {
         return reservationService.getReservationById(id);
