@@ -39,24 +39,24 @@ public class ReservationResource {
     @GetMapping
     public ReservationsResponse getReservations(
             @RequestParam(required = false) Long carId,
-            @RequestParam(required = false) Instant startDateFrom,
-            @RequestParam(required = false) Instant startDateTo,
+            @RequestParam(required = false) ZonedDateTime startDateFrom,
+            @RequestParam(required = false) ZonedDateTime startDateTo,
             @RequestParam(defaultValue = "Europe/Warsaw") String timeZone) {
 
         ZoneId zoneId = ZoneId.of(timeZone);
 
-        ZonedDateTime startDateTimeFrom = (startDateFrom != null) ? ZonedDateTime.ofInstant(startDateFrom, zoneId) : null;
-        ZonedDateTime startDateTimeTo = (startDateTo != null) ? ZonedDateTime.ofInstant(startDateTo, zoneId) : null;
+        Instant startInstant = startDateFrom != null ? startDateFrom.toInstant() : null;
+        Instant endInstant = startDateTo != null ? startDateTo.toInstant() : null;
 
 
         ReservationsResponse reservationsResponse = new ReservationsResponse();
-        if (carId != null && startDateTimeFrom != null && startDateTimeTo != null) {
+        if (carId != null && startInstant != null && endInstant != null) {
             reservationsResponse.setReservations(reservationService
-                    .getReservationsByCarAndDateRange(carId, startDateTimeFrom, startDateTimeTo));
+                    .getReservationsByCarAndDateRange(carId, startInstant, endInstant));
         } else if (carId != null) {
             reservationsResponse.setReservations(reservationService.getReservationsByCarId(carId));
-        } else if (startDateFrom != null && startDateTimeTo != null) {
-            reservationsResponse.setReservations(reservationService.getReservationsByDateRange(startDateTimeFrom, startDateTimeTo));
+        } else if (startDateFrom != null && endInstant != null) {
+            reservationsResponse.setReservations(reservationService.getReservationsByDateRange(startInstant, endInstant));
         } else {
             reservationsResponse.setReservations(reservationService.getReservations());
         }

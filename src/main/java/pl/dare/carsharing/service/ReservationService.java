@@ -10,6 +10,7 @@ import pl.dare.carsharing.repository.CarRepository;
 import pl.dare.carsharing.repository.CustomerRepository;
 import pl.dare.carsharing.repository.ReservationRepository;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -32,8 +33,8 @@ public class ReservationService {
         Customer customer = customerRepository.findById(request.getCustomerId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid customer ID"));
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime threeMinutesAgo = LocalDateTime.now().minusMinutes(3);
+        Instant now = Instant.now();
+        Instant threeMinutesAgo = Instant.now().minusSeconds(3 * 60);
 
         boolean carReserved = reservationRepository.existsByCarAndCreatedAtAfter(car, threeMinutesAgo);
         boolean customerReserved = reservationRepository.existsByCustomerAndCreatedAtAfter(customer, threeMinutesAgo);
@@ -46,7 +47,7 @@ public class ReservationService {
         reservation.setCar(car);
         reservation.setCustomer(customer);
         reservation.setCreatedAt(now);
-        reservation.setEndAt(now.plusMinutes(3));
+        reservation.setEndAt(now.plusSeconds(3 * 60));
         reservationRepository.save(reservation);
     }
 
@@ -72,7 +73,7 @@ public class ReservationService {
         return reservationsDto;
     }
 
-    public List<ReservationDto> getReservationsByCarAndDateRange(Long carId, ZonedDateTime startDateFrom, ZonedDateTime startDateTo) {
+    public List<ReservationDto> getReservationsByCarAndDateRange(Long carId, Instant startDateFrom, Instant startDateTo) {
         List<ReservationDto> reservationsDto = new ArrayList<>();
         List<Reservation> reservations = reservationRepository.findByCarIdAndStartDateBetween(carId, startDateFrom, startDateTo);
 
@@ -83,7 +84,7 @@ public class ReservationService {
         return reservationsDto;
     }
 
-    public List<ReservationDto> getReservationsByDateRange(ZonedDateTime startDateFrom, ZonedDateTime startDateTo) {
+    public List<ReservationDto> getReservationsByDateRange(Instant startDateFrom, Instant startDateTo) {
         List<ReservationDto> reservationsDto = new ArrayList<>();
         List<Reservation> reservations = reservationRepository.findByStartDateBetween(startDateFrom, startDateTo);
 

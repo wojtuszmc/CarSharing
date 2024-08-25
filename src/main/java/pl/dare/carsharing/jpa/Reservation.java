@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import pl.dare.carsharing.model.ReservationDto;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Data
@@ -22,10 +23,10 @@ public class Reservation {
     private Long id;
 
     @Column
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column
-    private LocalDateTime endAt;
+    private Instant endAt;
 
     @ManyToOne
     @JoinColumn(name = "car_id")
