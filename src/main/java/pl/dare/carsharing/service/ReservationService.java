@@ -11,8 +11,6 @@ import pl.dare.carsharing.repository.CustomerRepository;
 import pl.dare.carsharing.repository.ReservationRepository;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +26,9 @@ public class ReservationService {
     private CustomerRepository customerRepository;
 
     public void addReservation(AddReservationRequest request) {
+        Instant startInstant = request.getStartAt().toInstant();
+        Instant endInstant = request.getEndAt().toInstant();
+
         Car car = carRepository.findById(request.getCarId()).orElseThrow(() -> new IllegalArgumentException("Invalid car ID"));
 
         Customer customer = customerRepository.findById(request.getCustomerId())
@@ -47,7 +48,9 @@ public class ReservationService {
         reservation.setCar(car);
         reservation.setCustomer(customer);
         reservation.setCreatedAt(now);
-        reservation.setEndAt(now.plusSeconds(3 * 60));
+        reservation.setEndLagAt(now.plusSeconds(3 * 60));
+        reservation.setStartAt(startInstant);
+        reservation.setEndAt(endInstant);
         reservationRepository.save(reservation);
     }
 
@@ -117,6 +120,8 @@ public class ReservationService {
         reservationDto.setCarDto(mapToCarDto(reservation.getCar()));
         reservationDto.setCustomerDto(mapToCustomerDto(reservation.getCustomer()));
         reservationDto.setCreatedAt(reservation.getCreatedAt());
+        reservationDto.setEndLagAt(reservation.getEndLagAt());
+        reservationDto.setStartAt(reservation.getStartAt());
         reservationDto.setEndAt(reservation.getEndAt());
         return reservationDto;
     }

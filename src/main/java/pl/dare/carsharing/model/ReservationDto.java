@@ -4,11 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import pl.dare.carsharing.jpa.Car;
-import pl.dare.carsharing.jpa.Customer;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -21,5 +18,7 @@ public class ReservationDto {
     private CarDto carDto;
     private CustomerDto customerDto;
     private Instant createdAt;
+    private Instant endLagAt;
+    private Instant startAt;
     private Instant endAt;
 }

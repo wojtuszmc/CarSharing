@@ -45,8 +45,8 @@ public class ReservationResource {
 
         ZoneId zoneId = ZoneId.of(timeZone);
 
-        Instant startInstant = startDateFrom != null ? startDateFrom.toInstant() : null;
-        Instant endInstant = startDateTo != null ? startDateTo.toInstant() : null;
+        Instant startInstant = startDateFrom != null ? startDateFrom.withZoneSameInstant(zoneId).toInstant() : null;
+        Instant endInstant = startDateTo != null ? startDateTo.withZoneSameInstant(zoneId).toInstant() : null;
 
 
         ReservationsResponse reservationsResponse = new ReservationsResponse();
@@ -55,7 +55,7 @@ public class ReservationResource {
                     .getReservationsByCarAndDateRange(carId, startInstant, endInstant));
         } else if (carId != null) {
             reservationsResponse.setReservations(reservationService.getReservationsByCarId(carId));
-        } else if (startDateFrom != null && endInstant != null) {
+        } else if (startInstant != null && endInstant != null) {
             reservationsResponse.setReservations(reservationService.getReservationsByDateRange(startInstant, endInstant));
         } else {
             reservationsResponse.setReservations(reservationService.getReservations());
