@@ -11,6 +11,8 @@ import pl.dare.carsharing.repository.CustomerRepository;
 import pl.dare.carsharing.repository.ReservationRepository;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +27,11 @@ public class ReservationService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public void addReservation(AddReservationRequest request) {
-        Instant startInstant = request.getStartAt().toInstant();
-        Instant endInstant = request.getEndAt().toInstant();
+    public void addReservation(AddReservationRequest request, String timeZone) {
+        ZoneId userZoneId = ZoneId.of(timeZone);
+
+        Instant startInstant = request.getStartAt().withZoneSameInstant(userZoneId).toInstant();
+        Instant endInstant = request.getEndAt().withZoneSameInstant(userZoneId).toInstant();
 
         Car car = carRepository.findById(request.getCarId()).orElseThrow(() -> new IllegalArgumentException("Invalid car ID"));
 
@@ -116,6 +120,14 @@ public class ReservationService {
 
     private ReservationDto mapToReservationDto(Reservation reservation) {
         ReservationDto reservationDto = new ReservationDto();
+
+//        ZoneId zoneId = ZoneId.of(userTimeZone);
+
+//        ZonedDateTime createdAtZoned = reservation.getCreatedAt().atZone(zoneId);
+//        ZonedDateTime endLagAtZoned = reservation.getEndLagAt().atZone(zoneId);
+//        ZonedDateTime startAtZoned = reservation.getStartAt().atZone(zoneId);
+//        ZonedDateTime endAtZoned = reservation.getEndAt().atZone(zoneId);
+
         reservationDto.setId(reservation.getId());
         reservationDto.setCarDto(mapToCarDto(reservation.getCar()));
         reservationDto.setCustomerDto(mapToCustomerDto(reservation.getCustomer()));

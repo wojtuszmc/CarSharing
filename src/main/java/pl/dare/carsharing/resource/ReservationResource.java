@@ -64,8 +64,9 @@ public class ReservationResource {
     }
 
     @PostMapping
-    public void addReservation(@RequestBody AddReservationRequest request) {
-        reservationService.addReservation(request);
+    public void addReservation(@RequestBody AddReservationRequest request,
+            @RequestParam(defaultValue = "Europe/Warsaw") String timeZone) {
+        reservationService.addReservation(request, timeZone);
     }
 
     @DeleteMapping
