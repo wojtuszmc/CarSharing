@@ -52,13 +52,13 @@ public class ReservationResource {
         ReservationsResponse reservationsResponse = new ReservationsResponse();
         if (carId != null && startInstant != null && endInstant != null) {
             reservationsResponse.setReservations(reservationService
-                    .getReservationsByCarAndDateRange(carId, startInstant, endInstant));
+                    .getReservationsByCarAndDateRange(carId, startInstant, endInstant, timeZone));
         } else if (carId != null) {
-            reservationsResponse.setReservations(reservationService.getReservationsByCarId(carId));
+            reservationsResponse.setReservations(reservationService.getReservationsByCarId(carId, timeZone));
         } else if (startInstant != null && endInstant != null) {
-            reservationsResponse.setReservations(reservationService.getReservationsByDateRange(startInstant, endInstant));
+            reservationsResponse.setReservations(reservationService.getReservationsByDateRange(startInstant, endInstant, timeZone));
         } else {
-            reservationsResponse.setReservations(reservationService.getReservations());
+            reservationsResponse.setReservations(reservationService.getReservations(timeZone));
         }
         return reservationsResponse;
     }
@@ -75,8 +75,9 @@ public class ReservationResource {
     }
 
     @GetMapping("/{id}")
-    public ReservationDto getReservationById(@PathVariable("id") Long id) {
-        return reservationService.getReservationById(id);
+    public ReservationDto getReservationById(@PathVariable("id") Long id,
+        @RequestParam(defaultValue = "Europe/Warsaw") String timeZone) {
+        return reservationService.getReservationById(id, timeZone);
     }
 
     @PutMapping("/{id}")
@@ -90,7 +91,8 @@ public class ReservationResource {
     }
 
     @PostMapping("/all")
-    public void addReservations(List<ReservationDto> reservationsToAdd) {
-        reservationService.addReservations(reservationsToAdd);
+    public void addReservations(List<ReservationDto> reservationsToAdd,
+                                @RequestParam(defaultValue = "Europe/Warsaw") String timeZone) {
+        reservationService.addReservations(reservationsToAdd, timeZone);
     }
 }

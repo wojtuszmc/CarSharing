@@ -58,45 +58,45 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
-    public List<ReservationDto> getReservations() {
+    public List<ReservationDto> getReservations(String timeZone) {
         List<ReservationDto> reservationsDto = new ArrayList<>();
         List<Reservation> reservations = reservationRepository.findAll();
 
         for (Reservation reservation : reservations) {
-            ReservationDto reservationDto = mapToReservationDto(reservation);
+            ReservationDto reservationDto = mapToReservationDto(reservation, timeZone);
             reservationsDto.add(reservationDto);
         }
         return reservationsDto;
     }
 
-    public List<ReservationDto> getReservationsByCarId(Long carId) {
+    public List<ReservationDto> getReservationsByCarId(Long carId, String timeZone) {
         List<ReservationDto> reservationsDto = new ArrayList<>();
         List<Reservation> reservations = reservationRepository.findReservationsByCarId(carId);
 
         for (Reservation reservation : reservations) {
-            ReservationDto reservationDto = mapToReservationDto(reservation);
+            ReservationDto reservationDto = mapToReservationDto(reservation, timeZone);
             reservationsDto.add(reservationDto);
         }
         return reservationsDto;
     }
 
-    public List<ReservationDto> getReservationsByCarAndDateRange(Long carId, Instant startDateFrom, Instant startDateTo) {
+    public List<ReservationDto> getReservationsByCarAndDateRange(Long carId, Instant startDateFrom, Instant startDateTo, String timeZone) {
         List<ReservationDto> reservationsDto = new ArrayList<>();
         List<Reservation> reservations = reservationRepository.findByCarIdAndStartDateBetween(carId, startDateFrom, startDateTo);
 
         for (Reservation reservation : reservations) {
-            ReservationDto reservationDto = mapToReservationDto(reservation);
+            ReservationDto reservationDto = mapToReservationDto(reservation, timeZone);
             reservationsDto.add(reservationDto);
         }
         return reservationsDto;
     }
 
-    public List<ReservationDto> getReservationsByDateRange(Instant startDateFrom, Instant startDateTo) {
+    public List<ReservationDto> getReservationsByDateRange(Instant startDateFrom, Instant startDateTo, String timeZone) {
         List<ReservationDto> reservationsDto = new ArrayList<>();
         List<Reservation> reservations = reservationRepository.findByStartDateBetween(startDateFrom, startDateTo);
 
         for (Reservation reservation : reservations) {
-            ReservationDto reservationDto = mapToReservationDto(reservation);
+            ReservationDto reservationDto = mapToReservationDto(reservation, timeZone);
             reservationsDto.add(reservationDto);
         }
         return reservationsDto;
@@ -118,34 +118,34 @@ public class ReservationService {
         return customerDto;
     }
 
-    private ReservationDto mapToReservationDto(Reservation reservation) {
+    private ReservationDto mapToReservationDto(Reservation reservation, String timeZone) {
         ReservationDto reservationDto = new ReservationDto();
 
-//        ZoneId zoneId = ZoneId.of(userTimeZone);
+        ZoneId zoneId = ZoneId.of(timeZone);
 
-//        ZonedDateTime createdAtZoned = reservation.getCreatedAt().atZone(zoneId);
-//        ZonedDateTime endLagAtZoned = reservation.getEndLagAt().atZone(zoneId);
-//        ZonedDateTime startAtZoned = reservation.getStartAt().atZone(zoneId);
-//        ZonedDateTime endAtZoned = reservation.getEndAt().atZone(zoneId);
+        ZonedDateTime createdAtZoned = reservation.getCreatedAt().atZone(zoneId);
+        ZonedDateTime endLagAtZoned = reservation.getEndLagAt().atZone(zoneId);
+        ZonedDateTime startAtZoned = reservation.getStartAt().atZone(zoneId);
+        ZonedDateTime endAtZoned = reservation.getEndAt().atZone(zoneId);
 
         reservationDto.setId(reservation.getId());
         reservationDto.setCarDto(mapToCarDto(reservation.getCar()));
         reservationDto.setCustomerDto(mapToCustomerDto(reservation.getCustomer()));
-        reservationDto.setCreatedAt(reservation.getCreatedAt());
-        reservationDto.setEndLagAt(reservation.getEndLagAt());
-        reservationDto.setStartAt(reservation.getStartAt());
-        reservationDto.setEndAt(reservation.getEndAt());
+        reservationDto.setCreatedAt(createdAtZoned.toInstant());
+        reservationDto.setEndLagAt(endLagAtZoned.toInstant());
+        reservationDto.setStartAt(startAtZoned.toInstant());
+        reservationDto.setEndAt(endAtZoned.toInstant());
         return reservationDto;
     }
 
-    public void addReservations(List<ReservationDto> reservationsToAdd) {
-        getReservations().addAll(reservationsToAdd);
+    public void addReservations(List<ReservationDto> reservationsToAdd, String timeZone) {
+        getReservations(timeZone).addAll(reservationsToAdd);
     }
 
-    public ReservationDto getReservationById(Long id) {
+    public ReservationDto getReservationById(Long id, String timeZone) {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Reservation" +
                 " not found"));
-        ReservationDto reservationDto = mapToReservationDto(reservation);
+        ReservationDto reservationDto = mapToReservationDto(reservation, timeZone);
         return reservationDto;
     }
 
