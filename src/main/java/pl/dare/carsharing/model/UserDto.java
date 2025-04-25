@@ -16,5 +16,5 @@ public class UserDto {
 
     private String password;
 
-    private Long id;
+    private Long userID;
 }
