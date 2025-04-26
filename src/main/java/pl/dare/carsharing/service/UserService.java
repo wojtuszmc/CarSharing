@@ -3,7 +3,7 @@ package pl.dare.carsharing.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.dare.carsharing.jpa.User;
+import pl.dare.carsharing.jpa.AppUser;
 import pl.dare.carsharing.model.UserDto;
 import pl.dare.carsharing.repository.UserRepository;
 
@@ -18,7 +18,7 @@ public class UserService {
     public void registerUser(UserDto userDto) {
         String hashedPassword = passwordEncoder.encode(userDto.getPassword());
 
-        User user = new User();
+        AppUser user = new AppUser();
         user.setEmail(userDto.getEmail());
         user.setPassword(hashedPassword);
         userRepository.save(user);
