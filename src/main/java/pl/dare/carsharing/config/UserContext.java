@@ -7,7 +7,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 @Component
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
-
 public class UserContext {
     private Long userId;
 
